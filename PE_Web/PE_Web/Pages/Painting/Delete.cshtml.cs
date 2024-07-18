@@ -15,6 +15,11 @@ namespace PE_Web.Pages.Painting
 
         public WatercolorPaintingViewDto Painting { get; set; }
 
+        public class PaintingResponse
+        {
+            public List<WatercolorPaintingViewDto> Value { get; set; }
+        }
+
         public DeleteModel(IHttpClientFactory httpClientFactory)
         {
             httpClient = httpClientFactory.CreateClient();
@@ -29,16 +34,17 @@ namespace PE_Web.Pages.Painting
             {
                 var token = HttpContext.Session.GetString("Token");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage response = await httpClient.GetAsync($"{PaintingApiUrl}?$filter=paintingId eq {id}");
+                HttpResponseMessage response = await httpClient.GetAsync($"{PaintingApiUrl}?$filter=PaintingId eq '{id}'");
                 if (response.IsSuccessStatusCode)
                 {
                     string strData = await response.Content.ReadAsStringAsync();
-                    Painting = JsonConvert.DeserializeObject<WatercolorPaintingViewDto>(strData);
+                    var painting = JsonConvert.DeserializeObject<PaintingResponse>(strData);
+                    Painting = painting.Value[0];
                     return Page();
                 }
                 else
                 {
-                    return RedirectToPage("Error");
+                    return RedirectToPage("/Error");
                 }
             }
             else
@@ -60,7 +66,7 @@ namespace PE_Web.Pages.Painting
             }
             else
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
         }
     }

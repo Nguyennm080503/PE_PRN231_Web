@@ -32,24 +32,30 @@ namespace PE_Web.Pages.Painting
 
         private async Task LoadDataStyle()
         {
-            var token = HttpContext.Session.GetString("Token");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            HttpResponseMessage responseType = await httpClient.GetAsync(TypeApiUrl);
-
-            if (responseType.IsSuccessStatusCode)
+            try
             {
-                string strData = await responseType.Content.ReadAsStringAsync();
-                var style = JsonConvert.DeserializeObject<StyleResponse>(strData);
-                Style = style.Value;
+                var token = HttpContext.Session.GetString("Token");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                HttpResponseMessage responseType = await httpClient.GetAsync(TypeApiUrl);
+
+                if (responseType.IsSuccessStatusCode)
+                {
+                    string strData = await responseType.Content.ReadAsStringAsync();
+                    var style = JsonConvert.DeserializeObject<StyleResponse>(strData);
+                    Style = style.Value;
+                }
+            }catch(Exception ex)
+            {
+                MessageError = ex.Message;
             }
-        }
+        }   
 
         public async Task<IActionResult> OnGet()
         {
             if (HttpContext.Session.GetInt32("RoleID") == 3)
             {
-                LoadDataStyle();
+                await LoadDataStyle();
                 return Page();
             }
             else
@@ -64,17 +70,11 @@ namespace PE_Web.Pages.Painting
         public string MessageSuccess { get; set; } = "";
         public string MessageError { get; set; } = "";
 
-        public class ApiResponseStatus
-        {
-            public int StatusCode { get; set; }
-            public string Message { get; set; }
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                LoadDataStyle();
+                await LoadDataStyle();
                 return Page();
             }
 
@@ -102,14 +102,24 @@ namespace PE_Web.Pages.Painting
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 string strData = await response.Content.ReadAsStringAsync();
-                var apiResponse = System.Text.Json.JsonSerializer.Deserialize<ApiResponseStatus>(strData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                MessageError = apiResponse?.Message;
+                try
+                {
+                    var jsonDoc = JsonDocument.Parse(strData);
+                    var root = jsonDoc.RootElement;
+                    var error = root.GetProperty("error");
+                    var message = error.GetProperty("message").GetString();
+                    MessageError = message;
+                }
+                catch (Exception ex)
+                {
+                    MessageError = "An error occurred while parsing the error response.";
+                }
             }
             else
             {
                 MessageError = "An error occurred while creating the painting.";
             }
-            LoadDataStyle();
+            await LoadDataStyle();
             return Page();
         }
     }

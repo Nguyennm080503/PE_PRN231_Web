@@ -13,48 +13,41 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Painting.PaintingId" />
+            <input type="hidden" asp-for="@Model.Painting.PaintingId" />
 
             <div class="form-group">
                 <label asp-for="Painting.PaintingName" class="control-label"></label>
-                <input asp-for="Painting.PaintingName" class="form-control" required />
+                <input asp-for="@Model.Painting.PaintingName" class="form-control" required />
                 <span asp-validation-for="Painting.PaintingName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Painting.PaintingDescription" class="control-label"></label>
-                <input asp-for="Painting.PaintingDescription" class="form-control" />
+                <input asp-for="@Model.Painting.PaintingDescription" class="form-control" />
                 <span asp-validation-for="Painting.PaintingDescription" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Painting.PaintingAuthor" class="control-label"></label>
-                <input asp-for="Painting.PaintingAuthor" class="form-control" />
+                <input asp-for="@Model.Painting.PaintingAuthor" class="form-control" />
                 <span asp-validation-for="Painting.PaintingAuthor" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Painting.Price" class="control-label"></label>
-                <input asp-for="Painting.Price" class="form-control" />
+                <input asp-for="@Model.Painting.Price" class="form-control" />
                 <span asp-validation-for="Painting.Price" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Painting.PublishYear" class="control-label"></label>
-                <input asp-for="Painting.PublishYear" class="form-control" />
+                <input asp-for="@Model.Painting.PublishYear" class="form-control" />
                 <span asp-validation-for="Painting.PublishYear" class="text-danger"></span>
             </div>
 
-
             <div class="form-group">
                 <label asp-for="Painting.StyleName" class="control-label"></label>
-                <input asp-for="Painting.StyleName" class="form-control" />
-                <span asp-validation-for="Painting.StyleName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Painting.StyleName" class="control-label"></label>
-                <select asp-for="Painting.StyleName" class="form-control" asp-items="@(new SelectList(Model.Style, "StyleId", "StyleName", Model.Painting.StyleID))"></select>
+                <select asp-for="Painting.StyleID" class="form-control" asp-items="@(new SelectList(Model.Style, "StyleId", "StyleName", Model.Painting.StyleID))"></select>
                 <span asp-validation-for="Painting.StyleID" class="text-danger"></span>
             </div>
 
@@ -104,7 +97,7 @@
 </div>
 
 <div>
-    <a asp-page="/Admin/Painting/Index">Back to List</a>
+    <a asp-page="/Painting/Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -123,6 +116,14 @@
             if (messageError) {
                 $('#errorModal').modal('show');
             }
+
+            $('#successModal .btn-secondary').click(function () {
+                $('#successModal').modal('hide');
+            });
+
+            $('#errorModal .btn-secondary').click(function () {
+                $('#errorModal').modal('hide');
+            });
         });
     </script>
     @{

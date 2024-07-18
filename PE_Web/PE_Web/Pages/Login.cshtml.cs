@@ -22,9 +22,9 @@ namespace PE_Web.Pages
 
         public string ErrorMessage { get; set; }
 
-        public LoginModel(IHttpClientFactory httpClientFactory)
+        public LoginModel()
         {
-            httpClient = httpClientFactory.CreateClient();
+            httpClient = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             httpClient.DefaultRequestHeaders.Accept.Add(contentType);
         }
