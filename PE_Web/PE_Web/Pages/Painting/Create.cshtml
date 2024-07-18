@@ -1,0 +1,135 @@
+﻿@page
+@model PE_Web.Pages.Painting.CreateModel
+
+@{
+    ViewData["Title"] = "Create Watercolor Painting";
+}
+
+<h1>Create new Watercolor Painting</h1>
+
+<h4>Watercolor Painting Details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.PaintingId" class="control-label"></label>
+                <input asp-for="WatercolorPainting.PaintingId" class="form-control" required />
+                <span asp-validation-for="WatercolorPainting.PaintingId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.PaintingName" class="control-label"></label>
+                <input asp-for="WatercolorPainting.PaintingName" class="form-control" required />
+                <span asp-validation-for="WatercolorPainting.PaintingName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.PaintingDescription" class="control-label"></label>
+                <textarea asp-for="WatercolorPainting.PaintingDescription" class="form-control"></textarea>
+                <span asp-validation-for="WatercolorPainting.PaintingDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.PaintingAuthor" class="control-label"></label>
+                <input asp-for="WatercolorPainting.PaintingAuthor" class="form-control" />
+                <span asp-validation-for="WatercolorPainting.PaintingAuthor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.Price" class="control-label"></label>
+                <input asp-for="WatercolorPainting.Price" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="WatercolorPainting.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WatercolorPainting.PublishYear" class="control-label"></label>
+                <input asp-for="WatercolorPainting.PublishYear" class="form-control" type="number" />
+                <span asp-validation-for="WatercolorPainting.PublishYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Style Name</label>
+                <select asp-for="WatercolorPainting.StyleId" class="form-control">
+                    @foreach (var style in Model.Style)
+                    {
+                        <option value="@style.StyleId">@style.StyleName</option>
+                    }
+                </select>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Model.MessageSuccess
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Model.MessageError
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Painting/Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var messageSuccess = '@Model.MessageSuccess';
+            var messageError = '@Model.MessageError';
+
+            if (messageSuccess) {
+                $('#successModal').modal('show');
+            }
+
+            if (messageError) {
+                $('#errorModal').modal('show');
+            }
+
+            $('#successModal .btn-secondary').click(function () {
+                $('#successModal').modal('hide');
+            });
+
+            $('#errorModal .btn-secondary').click(function () {
+                $('#errorModal').modal('hide');
+            });
+        });
+
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

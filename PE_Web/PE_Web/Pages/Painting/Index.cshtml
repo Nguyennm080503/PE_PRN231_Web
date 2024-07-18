@@ -1,0 +1,65 @@
+﻿@page
+@model PE_Web.Pages.Painting.IndexModel
+
+@{
+    ViewData["Title"] = "Painting List";
+}
+@{
+    var session = HttpContext.Session;
+    var roleId = session.GetInt32("RoleID");
+}
+
+<h1>Painting List</h1>
+@if (roleId == 3)
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
+
+<form method="get">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search by Author or Year" name="searchString" value="@ViewData["CurrentFilter"]" />
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Painting Name</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Publish Year</th>
+            <th>Created Date</th>
+            <th>Style</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Paintings)
+        {
+            <tr>
+                <td>@item.PaintingName</td>
+                <td>@item.PaintingDescription</td>
+                <td>@item.PaintingAuthor</td>
+                <td>@item.Price</td>
+                <td>@item.PublishYear</td>
+                <td>@item.CreatedDate</td>
+                <td>@item.StyleName</td>
+                @if (roleId == 3)
+                {
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@item.PaintingId">Edit</a> |
+                    <a asp-page="Delete" asp-route-id="@item.PaintingId">Delete</a>
+                </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

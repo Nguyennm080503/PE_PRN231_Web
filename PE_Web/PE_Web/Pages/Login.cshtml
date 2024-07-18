@@ -1,0 +1,39 @@
+﻿@page
+@model PE_Web.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div>
+    <p class="display-4" style="font-size: 1.3rem; font-weight: 500;">Please log in here.</p>
+    <p class="display-4" style="font-size: 1rem">Enter your details below</p>
+    <hr />
+    <h3 style="font-weight: bold; margin-bottom: 20px; display: flex; justify-content: center; align-items: center;margin-top:20px">Login Form</h3>
+    <div class="ps-5 ms-5" style="display: flex; justify-content: center; align-items: center">
+        <form method="post">
+            <div class="d-flex mt-2" style="font-size: 0.8rem;">
+                <div>
+                    <p class="px-2 ps-0 my-0" style="font-size: 0.8rem; font-weight: bolder;">Email</p>
+                    <p class="px-2 ps-0 my-0 mt-2 pt-1" style="font-size: 0.8rem; font-weight: bolder;">Password</p>
+                </div>
+                <div class="mx-3">
+                    <div>
+                        <input type="text" asp-for="Email" style="border-radius: 3px; border: 1px solid #dfe0e2;" class="px-2" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <input type="password" asp-for="Password" style="border-radius: 3px; border: 1px solid #dfe0e2;" class="px-2 mt-2" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mt-2 pt-1">
+                        <button type="submit" class="px-2 py-1 border-0" style="background-color: #204ac9;
+                            color: #fff; border-radius: 5px">
+                            Log in
+                        </button>
+                        <p id="error-message" class="text-danger mt-2">@Model.ErrorMessage</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
